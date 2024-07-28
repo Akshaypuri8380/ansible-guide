@@ -1,0 +1,64 @@
+****************ansible installation**************************
+[ansible config file =  /etc/ansible/ansible.cfg ]
+[default ansible home = /etc/ansible ]
+* server side *
+***************Installation (centos-7) step by step*****************
+**********server side*************
+#Add the EPEL Repository.
+1) sudo yum install epel-release
+#Update packages.
+2) sudo yum -y update
+#Once the packages have been updated, install Ansible with yum.
+3) sudo yum -y install ansible
+#after installation please check ansible version
+4) ansible --version
+# Install the Python packages on server and client side.
+5)sudo yum -y install python-pip pip
+#check python version (python version should br more 2.6 version)
+6) python --version
+#create same user(ansadmin) across all server and provide password for all users.(server and client)
+7) sudo su -
+8) useradd ansadmin
+9) passwd ansadmin
+-password= ans@123
+new-password:- ans@123 (password whatever you want please give)
+#provide Root privileges to all ansadmin users on all servers(Client & server)
+10)visudo
+#in visudo go to down and right
+ ansadmin	ALL=(ALL)	NOPASSWD: ALL 
+#make sure that passwordAuthentication yes in all server under /etc/ssh/sshd_config)
+11) vi /etc/ssh/sshd_config
+#check PasswdAuthentication yes
+#then restart sshd
+12) systemctl restart sshd or service sshd restart
+#Generate ssh-keys using ssh-keygen command from ansadmin.
+13) sudo su ansadmin
+14) cd
+15) ls -a
+16) ssh-keygen
+17) ls -a (check .ssh file and enter that .ssh file)
+18) cd .ssh/
+19) ls -lrt
+# copy ssh public key using ssh-copy-id <hostname> from /home/ansadmin/.ssh/ location (server side)
+20) ssh-copy-id client side ip
+#now login to remote server without providing password with the following command
+21) ssh user_name@ip ot ssh client_ip
+#update inventory file with ip
+22)cd
+23)cd /etc/ansible/
+24)ls
+25) sudo vi hosts :-(in that file put your client ip ...second line)
+#now we can test connection from ansible engine to manage node using(for this step you should in ansadmin user)
+26) ansible all -m ping
+output:-192.168.244.131 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+
+you are successfully install and configure ansible
+
+****************************Thank You*****************************
+
